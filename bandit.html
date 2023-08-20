@@ -1,0 +1,358 @@
+<!DOCTYPE HTML>
+<!--
+	Dopetrope by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>ssi51 | OverTheWire: Bandit</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<style>
+			.code {
+			  color: blue;
+			  font-family: "Courier New", monospace;
+			}
+
+			.highlight {
+			  color: red;
+			}
+		  </style>
+	</head>
+	<body class="no-sidebar is-preload">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<section id="header">
+
+					<!-- Logo -->
+						<h1>~/ssi51/Bandit</h1>
+
+					<!-- Nav -->
+						<nav id="nav">
+							<ul>
+								<li><a href="index.html">Back to Home</a></li>
+							</ul>
+						</nav>
+
+				</section>
+
+			<!-- Main -->
+				<section id="main">
+					<div class="container">
+
+						<!-- Content -->
+							<article class="box post">
+								<a href="#" class="image featured"><img src="images/pic04.jpg" alt="" /></a>
+								<header>
+									<h2>OverTheWire: Bandit Walkthrough</h2>
+									<p>by ssi51</p>
+								</header>
+								<p>
+									OverTheWire Bandit is an online platform that offers a series of beginner-friendly cybersecurity challenges. 
+									Players learn by solving tasks involving Linux command-line, cryptography, and hacking concepts, progressing 
+									through increasingly difficult levels. It's a hands-on way to learn about cybersecurity in a controlled 
+									environment.<br>
+									This platform helped me a lot with getting used to Linux commands. Shoutout to Fatah for introducing me this website!
+								</p>
+								<section>
+									<header>
+										<h3>Level 0</h3>
+									</header>
+									<p>
+										<i class="icon solid fa-lightbulb"></i><b>  Goal: Log into the game using SSH.</b><br>
+										We’re given username and password to log into SSH on port 2220. Input the password bandit0 and you’re in!<br>
+										To list out all the files in the current directory, use <span class="code">ls</span>. To read the file, we'll use <span class="code">cat [filename]</span> command.<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/1.png" alt="" /></a>
+										There you go. We got the password for the next level.
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Level 1</h3>
+									</header>
+									<p>
+										<i class="icon solid fa-lightbulb"></i><b>    Hint: The password for the next level is stored in a file called readme located in the home directory.</b><br>
+										Let’s log into Level 1 using the password we received earlier.<br>
+										As usual we will use ls to list out the files in home directory. To read them we’ll use <span class="code">cat [filename]</span> command.<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/2.png" alt="" /></a>
+										But in this case, it seems like <span class="code">cat</span> cannot read a file that starts with a symbol. To solve this, we need to state the full directory path to read them. To double-check the current directory path, use the <span class="code">pwd</span> command. Then, <span class="code">cat /home/bandit1/-</span><br>
+										<br>
+										<a class="image centered"><img src="images/bandit/3.png" alt="" /></a>
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Level 2</h3>
+									</header>
+									<p>
+										<i class="icon solid fa-lightbulb"></i><b>    Hint: The password for the next level is stored in a file called spaces in this filename located in the home directory.</b><br>
+										Let’s start with <span class="code">ls</span>. To read the file, we can use the <span class="code">cat</span> command.<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/4.png" alt="" /></a>
+										Uh-oh there’s an error. Looks like <span class="code">cat</span> can’t read filename with spaces. To solve this, we need to add quotation marks in between the filename: <span class="code">cat “spaces in this filename”</span>
+										<br>
+										<a class="image centered"><img src="images/bandit/5.png" alt="" /></a>
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Level 3</h3>
+									</header>
+									<p>
+										<i class="icon solid fa-lightbulb"></i><b>    Hint:The password for the next level is stored in a hidden file in the inhere directory.</b><br>
+										As usual, to list out all the files, we’ll use <span class="code">ls</span>. We can see there’s directory called 
+										inhere. To go to that directory, we’ll use <span class="code">cd</span> command. When we try to list out files 
+										in inhere directory, we didn’t get any output. From the hint, it says it is a hidden file. To view a hidden file, 
+										we need to add extra command with <span class="code">ls</span>.<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/6.png" alt="" /></a>
+										We will use <span class="code">ls -lai</span> which means:<br>
+										<span class="highlight">-l means use a long listing format</span><br>
+										<span class="highlight">-a means do not ignore entries starting with .</span><br>
+										<span class="highlight">-i  means print the index number of each file</span><br>
+										Then, we’ll use <span class="code">cat</span> to read the content.<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/7.png" alt="" /></a>
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Level 4</h3>
+									</header>
+									<p>
+										<i class="icon solid fa-lightbulb"></i><b>    Hint:The password for the next level is stored in the only human-readable file in the inhere directory.</b>
+										As usual, let’s start with listing all the files in the inhere directory<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/8.png" alt="" /></a>
+										Oh my there’s so many files! Instead of having to <span class="code">cat</span> (or read) one by one, 
+										we need to remember that we’re given a hint. <i>The password in human-readable file.</i> So let’s check their 
+										filetype by using the command <span class="code">file ./*</span><br>
+										<span class="highlight">./ means current directory</span><br>
+										<span class="highlight">* means select all files</span><br>
+										<br>
+										<a class="image centered"><img src="images/bandit/9.png" alt="" /></a>
+										We can see that -file07 is in ASCII text. That should be it. Let’s read it.<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/10.png" alt="" /></a>
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Level 5</h3>
+									</header>
+									<p>
+										<i class="icon solid fa-lightbulb"></i><b>    Hint: The password for the next level is stored in a file somewhere under the inhere directory and has all of the following properties:<br>
+										- human-readable<br>
+										- 1033 bytes in size<br>
+										- not executable</b><br>
+										As usual, we’ll go to the inhere directory and list out all the contents. We can see there’s a lot of 
+										directories in here.<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/11.png" alt="" /></a>
+										To make it simple, let’s find the file according to the properties given by the hint. 
+										We’ll use the <span class="code">find</span> command. To specify the file, we’ll add <span class="code">-size 1033c</span><br>
+										<br>
+										<a class="image centered"><img src="images/bandit/12.png" alt="" /></a>
+										<span class="highlight">c in size means bytes</span><br>
+										So over here, it gives the output where is the file according to our specifications that we have set earlier. Let’s <span class="code">cat</span> the file to get the password.<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/13.png" alt="" /></a>
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Level 6</h3>
+									</header>
+									<p>
+										<i class="icon solid fa-lightbulb"></i><b>    Hint: The password for the next level is stored somewhere on the server and has all of the following properties:<br>
+										- owned by user bandit7<br>
+										- owned by group bandit6<br>
+										- 33 bytes in size</b><br>
+										According to the hint, the password is stored somewhere in the server. So, let’s go to the / directory. (Use <span class="code">cd /</span> command.)<br>
+										<span class="highlight">/ means root directory. It is the uppermost directory in the Linux system containing all the files, device data and system information in the form of directories.</span><br>
+										Now we’re in the root directory. Let’s use the <span class="code">find</span> command just like previous task. 
+										But this time, let’s specify the user owner, group owner and file size according to the hint. To do this, use 
+										<span class="code">find ./ -type f -size 33c -user bandit7 -group bandit6</span><br>
+										<span class="highlight">-type f means the type is a file</span><br>
+										<span class="highlight">-user bandit7 means the owner of the file is bandit7</span><br>
+										<span class="highlight">-group bandit6 means the group owner of the file is bandit6</span><br>
+										<br>
+										<a class="image centered"><img src="images/bandit/14.png" alt="" /></a>
+										Oh my, there’s so many Permission denied status. Let’s omit this by adding <span class="code">2>/dev/null</span> to the command.<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/15.png" alt="" /></a>
+										<span class="highlight">The command 2>/dev/null is like you're telling the shell to redirect the error messages produced by the command to /dev/null, effectively silencing them and preventing them from being displayed on the screen or captured in the output.</span><br>
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Level 7</h3>
+									</header>
+									<p>
+										<i class="icon solid fa-lightbulb"></i><b>    Hint: The password for the next level is stored in the file data.txt next to the word millionth</b><br>
+										If we cat the data.txt file, it will give us a countless words of output<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/16.png" alt="" /></a>
+										<br>
+										Let’s try finding the specific word in the text file, in this case, its the word “millionth”. 
+										We can use <span class="code">grep</span> for this. <span class="code">cat data.txt | grep “millionth”</span><br>
+										<br>
+										<a class="image centered"><img src="images/bandit/17.png" alt="" /></a>
+										<span class="highlight">grep is a command-line utility for searching plain-text data sets for lines that match a regular expression.</span><br>
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Level 8</h3>
+									</header>
+									<p>
+										<i class="icon solid fa-lightbulb"></i><b>    Hint: The password for the next level is stored in the file data.txt and is the only line of text that occurs only once.</b><br>
+										We will use the same method as before, but keep in mind that the line of text only occurs once. We will make use of the <span class="code">uniq</span> command.<br>
+										<span class="highlight">Uniq will outputs the text with adjacent identical lines collapsed to one, unique line of text.</span><br>
+										<br>
+										<a class="image centered"><img src="images/bandit/18.png" alt="" /></a>
+										This command will still give us countless amount of outputs. This is because it does not get rid of the duplicated ones. The correct command would be <span class="code">sort data.txt | uniq -u</span><br>
+										<br>
+										<a class="image centered"><img src="images/bandit/19.png" alt="" /></a>
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Level 9</h3>
+									</header>
+									<p>
+										<i class="icon solid fa-lightbulb"></i><b>    Hint: The password for the next level is stored in the file data.txt in one of the few human-readable strings, preceded by several ‘=’ characters.</b><br>
+										This level would be just the same as Level 7. Let’s try <span class="code">cat data.txt | grep "="</span><br>
+										<br>
+										<a class="image centered"><img src="images/bandit/20.png" alt="" /></a>
+										Looks like it couldn’t give what we want. Normally, if the first few bytes of a file indicate that the file 
+										contains binary data, <span class="code">grep</span> outputs only a message saying that the file matches the pattern. To fix this, 
+										instead of using <span class="code">cat</span>, we’ll use <span class="code">strings</span>.<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/21.png" alt="" /></a>
+										<span class="highlight">Strings command is used to return the string characters into files. It primarily focuses on determining the contents of and extracting text from the binary files (non-text file).</span>
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Level 10</h3>
+									</header>
+									<p>
+										<i class="icon solid fa-lightbulb"></i><b>    Hint: The password for the next level is stored in the file data.txt, which contains base64 encoded data</b><br>
+										We got one hint that says the file is in base64. To convert base64 to ASCII in kali, we can use the command <span class="code">base64 -d data.txt</span><br>
+										<br>
+										<a class="image centered"><img src="images/bandit/22.png" alt="" /></a>
+										<span class="highlight">-d means decode</span>
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Level 11</h3>
+									</header>
+									<p>
+										<i class="icon solid fa-lightbulb"></i><b>    Hint: The password for the next level is stored in the file data.txt, where all lowercase (a-z) and uppercase (A-Z) letters have been rotated by 13 positions</b><br>
+										Rotated by 13 positions are also known as Rot13 Cipher. Let’s <span class="cat">grep</span> the file and decode it online.<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/23.png" alt="" /></a>
+										Here I copied the text from the file and paste it at https://rot13.com/<br>
+										<br>
+										<a class="image centered"><img src="images/bandit/24.png" alt="" /></a>
+										The password is JVNBBFSmZwKKOP0XbFXOoW8chDz5yVRv
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Conclusion</h3>
+									</header>
+									<p>
+										Congratulations! We made it until Level 12!<br>
+										Level 0 up to 12 are aimed at absolute beginners. It will teach the basics needed to be able to play other wargames. You may continue until you made it to Level 33. Thank you so much for reading!<br>
+									</p>
+								</section>
+							</article>
+
+					</div>
+				</section>
+
+			<!-- Footer -->
+            <section id="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-4 col-12-medium">
+                            <section>
+                                <header>
+                                    <h2>About Me</h2>
+                                </header>
+                                <a href="#" class="image featured"><img src="images/pic10.jpg" alt="" /></a>
+                                <p>
+                                    I am <strong>Sarah</strong>, a full-time Network Security student and a part-time sleep aficionado.
+                                    Stay tuned to my blog for the latest insights. Let's embark on this cyber journey with me!
+                                </p>
+                                <footer>
+                                </footer>
+                            </section>
+                        </div>
+                        <div class="col-4 col-6-medium col-12-small">
+                            <section>
+                                <header>
+                                    <h2></h2>
+                                </header>
+                                <ul class="divided">
+                                    <li></li>
+                                </ul>
+                            </section>
+                        </div>
+                        <div class="col-4 col-6-medium col-12-small">
+                            <section>
+                                <header>
+                                    <h2>Stay in Touch</h2>
+                                </header>
+                                <ul class="social">
+                                    <li><a class="icon brands fa-linkedin" href="https://www.linkedin.com/in/sarahmjufri/"><span class="label">LinkedIn</span></a></li>
+                                    <li><a class="icon brands fa-github" href="https://github.com/ssi51"><span class="label">Github</span></a></li>
+                                </ul>
+                                <ul class="contact">
+                                    <li>
+                                        <h3>Based</h3>
+                                        <p>
+                                            Kuala Lumpur, Malaysia
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <h3>Email</h3>
+                                        <p>ssarahimanina@gmail.com</p>
+                                    </li>
+                                </ul>
+                            </section>
+                        </div>
+                        <div class="col-12">
+
+								<!-- Copyright -->
+                                    <div id="copyright">
+                                        <ul class="links">
+                                            <li>&copy; DopeTrope. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                                        </ul>
+                                    </div>
+
+							</div>
+						</div>
+					</div>
+				</section>
+
+		</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

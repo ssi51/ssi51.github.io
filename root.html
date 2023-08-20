@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<!--
+	Dopetrope by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>ssi51 | Root Me</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+        <style>
+			.code {
+			  color: blue;
+			  font-family: "Courier New", monospace;
+			}
+
+			.highlight {
+			  color: red;
+			}
+
+            .qna {
+                color: blue;
+            }
+		  </style>
+	</head>
+	<body class="no-sidebar is-preload">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<section id="header">
+
+					<!-- Logo -->
+						<h1>~/ssi51/THM/Root Me</h1>
+
+					<!-- Nav -->
+                        <nav id="nav">
+                            <ul>
+                                <li><a href="index.html">Back to Home</a></li>
+                            </ul>
+                        </nav>
+
+				</section>
+
+			<!-- Main -->
+				<section id="main">
+					<div class="container">
+
+						<!-- Content -->
+							<article class="box post">
+								<header>
+									<h2>Root Me Walkthrough</h2>
+									<p>by ssi51</p>
+								</header>
+								<p>
+                                    A ctf for beginners, can you root me?
+								</p>
+								<section>
+									<header>
+										<h3>Task 1: Deploy the machine</h3>
+									</header>
+                                </section>
+                                <section>
+                                    <header>
+                                        <h3>Task 2: Reconnaissance</h3>
+                                    </header>
+									<p>
+                                        <span class="qna">Q1: Scan the machine, how many ports are open?</span><br>
+                                        Let's start with Nmap scan. <span class="code">sudo nmap -sS -sV [Machine IP]</span><br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/1.png" alt="" /></a>
+                                        <span class="qna">Answer: 2</span><br>
+                                        <span class="qna">Q2: What version of Apache is running?<br>
+                                            Answer: 2.4.29<br>
+                                            Q3: What service is running on port 22?<br>
+                                            Answer: ssh</span><br>
+                                        (These 2 questions are answered in the first screenshot.)<br>
+                                        <span class="qna">Q4: Find directories on the web server using the GoBuster tool. What is the hidden directory?</span><br>
+                                        The command I use for this is <span class="code">gobuster dir -u http://[Machine IP] -w [Wordlist path]</span><br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/2.png" alt="" /></a>
+                                        <span class="qna">Answer: /panel/</span><br>
+                                    </p>
+                                </section>
+                                <section>
+                                    <header>
+                                        <h3>Task 3: Getting a shell</h3>
+                                    </header>
+                                    <p>
+                                        <span class="qna">Q: Find a form to upload and get a reverse shell, and find the flag.</span><br>
+                                        Let's go to web browser and search for http://[Machine IP]/panel/. It will lead you to a website that allows you to upload a file.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/3.jpg" alt="" /></a>
+                                        I will upload a php reverse shell script for this task. I like to use the pentestmonkey php-reverse-shell.php script for this. You can get them from <a href="https://github.com/pentestmonkey/php-reverse-shell">PentestMonkey PHP Reverse Shell</a>. Let's upload them!<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/4.png" alt="" /></a>
+                                        Uh-oh looks like the website doesn't accept files with .php extensions. No worries, we can always rename the file to another extension name. I renamed them as .php5 file.<br>
+                                        <span class="highlight">You may read more facts about PHP at <a href="https://www.cloudways.com/blog/php-version-history/#:~:text=There%20have%20been%20multiple%20versions,with%20minor%20releases%20and%20updates.">PHP Version History</a></span><br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/5.png" alt="" /></a>
+                                        Yeay! Let's start a netcat session on our Kali machine. I use the command <span class="code">nc -nvlp 1234</span>. Let's go to http://[Machine IP]/uploads/ to activate our script.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/7.png" alt="" /></a>
+                                        Now wait for our netcat to receive connection...<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/6.png" alt="" /></a>
+                                        Yeay! We received the shell. Now, let's find user.txt to get the flag. I use the command <span class="code">find / -name user.txt</span><br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/8.png" alt="" /></a>
+                                        You'll get a lot of outputs but hang in there! Let's <span class="code">cat</span> the file!<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/9.png" alt="" /></a>
+                                        <span class="qna">Answer: THM{y0u_g0t_a_sh3ll}</span>
+                                    </p>
+                                </section>
+                                <section>
+                                    <header>
+                                        <h3>Task 4: Privillege escalation</h3>
+                                    </header>
+                                    <p>
+                                        Now that we have a shell, let's escalate our privileges to root.<br>
+                                        <span class="qna">Q1: Search for files with SUID permission, which file is weird?</span><br>
+                                        SUID is a special file permission that can only be applied to executable files. To do this, let's use this command: <span class="code">find / -user root -perm 400</span><br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/10.png" alt="" /></a>
+                                        <span class="qna">Answer: /usr/bin/python</span><br>
+                                        Let's try escalate our privileges using <a href="https://gtfobins.github.io/">GTFOBins</a>. It is a curated list of Unix binaries that can be used to bypass local security restrictions in misconfigured systems.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/11.png" alt="" /></a>
+                                        Copy the second command and paste in the shell to see if it works. Remove ./ from the command and run it.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/12.png" alt="" /></a>
+                                        Yeay we're root now! Let's find the root.txt. I use the command <span class="code">find / -type f -name root.txt</span>. Let's use cat to read them.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/root/13.png" alt="" /></a>
+                                        <span class="qna">Answer: THM{pri1v1l3g3_3sc4l4t10n}</span>
+                                    </p>
+                                </section>
+								<section>
+									<header>
+										<h3>Thank you for reading! <3</h3>
+									</header>
+								</section>
+							</article>
+
+					</div>
+				</section>
+
+			<!-- Footer -->
+            <section id="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-4 col-12-medium">
+                            <section>
+                                <header>
+                                    <h2>About Me</h2>
+                                </header>
+                                <a href="#" class="image featured"><img src="images/pic10.jpg" alt="" /></a>
+                                <p>
+                                    I am <strong>Sarah</strong>, a full-time Network Security student and a part-time sleep aficionado.
+                                    Stay tuned to my blog for the latest insights. Let's embark on this cyber journey with me!
+                                </p>
+                                <footer>
+                                </footer>
+                            </section>
+                        </div>
+                        <div class="col-4 col-6-medium col-12-small">
+                            <section>
+                                <header>
+                                    <h2></h2>
+                                </header>
+                                <ul class="divided">
+                                    <li></li>
+                                </ul>
+                            </section>
+                        </div>
+                        <div class="col-4 col-6-medium col-12-small">
+                            <section>
+                                <header>
+                                    <h2>Stay in Touch</h2>
+                                </header>
+                                <ul class="social">
+                                    <li><a class="icon brands fa-linkedin" href="https://www.linkedin.com/in/sarahmjufri/"><span class="label">LinkedIn</span></a></li>
+                                    <li><a class="icon brands fa-github" href="https://github.com/ssi51"><span class="label">Github</span></a></li>
+                                </ul>
+                                <ul class="contact">
+                                    <li>
+                                        <h3>Based</h3>
+                                        <p>
+                                            Kuala Lumpur, Malaysia
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <h3>Email</h3>
+                                        <p>ssarahimanina@gmail.com</p>
+                                    </li>
+                                </ul>
+                            </section>
+                        </div>
+                        <div class="col-12">
+
+                            <!-- Copyright -->
+                                <div id="copyright">
+                                    <ul class="links">
+                                        <li>&copy; DopeTrope. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                                    </ul>
+                                </div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+		</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<!--
+	Dopetrope by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>ssi51 | Pickle Rick</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+        <style>
+			.code {
+			  color: blue;
+			  font-family: "Courier New", monospace;
+			}
+
+			.highlight {
+			  color: red;
+			}
+		  </style>
+	</head>
+	<body class="no-sidebar is-preload">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<section id="header">
+
+					<!-- Logo -->
+						<h1>~/ssi51/THM/Pickle Rick</h1>
+
+					<!-- Nav -->
+                        <nav id="nav">
+                            <ul>
+                                <li><a href="index.html">Back to Home</a></li>
+                            </ul>
+                        </nav>
+
+				</section>
+
+			<!-- Main -->
+				<section id="main">
+					<div class="container">
+
+						<!-- Content -->
+							<article class="box post">
+								<a href="#" class="image featured"><img src="images/pickle.jpg" alt="" /></a>
+								<header>
+									<h2>Pickle Rick Walkthrough</h2>
+									<p>by ssi51</p>
+								</header>
+								<p>
+									This Rick and Morty-themed challenge requires you to exploit a web server and find three ingredients 
+                                    to help Rick make his potion and transform himself back into a human from a pickle.
+								</p>
+								<section>
+									<header>
+										<h3>Let's Start!</h3>
+									</header>
+									<p>
+                                        I always start with Nmap first :D<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/1.png" alt="" /></a>
+                                        Now let’s access the web application<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/2.png" alt="" /></a>
+                                        Nothing helpful… let’s right-click and view page source<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/3.png" alt="" /></a>
+                                        We can get the username via page source. If there’s a username, there has to be a password too. We could make use of the robots.txt file<br>
+                                        <span class="highlight">The robots. txt file contains a list of directories and files from a web server. 
+                                        The entries within the robots. txt file are created by the website owner or web administrator and are used 
+                                        to hide directory locations from web crawlers.</span><br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/4.png" alt="" /></a>
+                                        ‘Wubbalubbadubdub’ may be the password. But where could we use this username and password? 
+                                        Let’s find other directories for this website using Gobuster using the command 
+                                        <span class="code">gobuster dir -u http://[MACHINE_IP]:80 -w /usr/share/wordlists/dirbuster/directory-list-1.0.txt</span><br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/5.png" alt="" /></a>
+                                        We could fetch /assets directory. Let’s access them.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/6.png" alt="" /></a>
+                                        I tried to click each one of them but there’s nothing interesting. There has to be a page that uses this jpg file.<br>
+                                        I sorta relate this with a login page and here’s what I found. Let’s use the username and password we found earlier.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/7.png" alt="" /></a>
+                                        <span class="highlight">Username: R1ckRul3s<br>
+                                            Password: Wubbalubbadubdub</span><br>
+                                        And we’re in!<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/8.png" alt="" /></a>
+                                        We can think of the input field as a terminal. I’ll be using <span class="code">ls</span> to lists the directory contents of files and directories.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/9.png" alt="" /></a>
+                                        Let’s read the Sup3rS3cretPickl3Ingred.txt file using <span class="code">cat</span><br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/10.png" alt="" /></a>
+                                        Okay let’s not freak out. We can try <span class="code">less</span> command!<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/11.png" alt="" /></a>
+                                        Yeay we got our first ingredient! Now onto the next step, I’ve been thinking to list all the folders and sub folders in root to find other two ingredients. Let’s check for sudo privilleges using <span class="code">sudo -l</span><br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/12.png" alt="" /></a>
+                                        Alright we can run sudo to ALL without password. Let’s list them all using <span class="code">sudo ls ../../../*</span><br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/13.png" alt="" /></a>
+                                        <span class="highlight">To know why I use the ../../../* command, you may learn them from File Inclusion room on TryHackMe</span><br>
+                                        The list goes on and on… After spending a few minutes looking for them, I could find the other two ingredients.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/14.png" alt="" /></a><br>
+                                        <a class="image centered"><img src="images/pickle/15.png" alt="" /></a><br>
+                                        Finally we have all our ingredients!<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/pickle/16.png" alt="" /></a>
+									</p>
+								</section>
+								<section>
+									<header>
+										<h3>Thank you for reading! <3</h3>
+									</header>
+								</section>
+							</article>
+
+					</div>
+				</section>
+
+			<!-- Footer -->
+            <section id="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-4 col-12-medium">
+                            <section>
+                                <header>
+                                    <h2>About Me</h2>
+                                </header>
+                                <a href="#" class="image featured"><img src="images/pic10.jpg" alt="" /></a>
+                                <p>
+                                    I am <strong>Sarah</strong>, a full-time Network Security student and a part-time sleep aficionado.
+                                    Stay tuned to my blog for the latest insights. Let's embark on this cyber journey with me!
+                                </p>
+                                <footer>
+                                </footer>
+                            </section>
+                        </div>
+                        <div class="col-4 col-6-medium col-12-small">
+                            <section>
+                                <header>
+                                    <h2></h2>
+                                </header>
+                                <ul class="divided">
+                                    <li></li>
+                                </ul>
+                            </section>
+                        </div>
+                        <div class="col-4 col-6-medium col-12-small">
+                            <section>
+                                <header>
+                                    <h2>Stay in Touch</h2>
+                                </header>
+                                <ul class="social">
+                                    <li><a class="icon brands fa-linkedin" href="https://www.linkedin.com/in/sarahmjufri/"><span class="label">LinkedIn</span></a></li>
+                                    <li><a class="icon brands fa-github" href="https://github.com/ssi51"><span class="label">Github</span></a></li>
+                                </ul>
+                                <ul class="contact">
+                                    <li>
+                                        <h3>Based</h3>
+                                        <p>
+                                            Kuala Lumpur, Malaysia
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <h3>Email</h3>
+                                        <p>ssarahimanina@gmail.com</p>
+                                    </li>
+                                </ul>
+                            </section>
+                        </div>
+                        <div class="col-12">
+
+                            <!-- Copyright -->
+                                <div id="copyright">
+                                    <ul class="links">
+                                        <li>&copy; DopeTrope. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                                    </ul>
+                                </div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+		</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
