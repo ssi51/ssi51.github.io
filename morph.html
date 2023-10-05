@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<!--
+	Dopetrope by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>ssi51 | Morpheus</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+        <style>
+			.code {
+			  color: blue;
+			  font-family: "Courier New", monospace;
+			}
+
+			.highlight {
+			  color: red;
+			}
+
+            .qna {
+                color: blue;
+            }
+		  </style>
+	</head>
+	<body class="no-sidebar is-preload">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<section id="header">
+
+					<!-- Logo -->
+						<h1>~/ssi51/THM/Morpheus</h1>
+
+					<!-- Nav -->
+                        <nav id="nav">
+                            <ul>
+                                <li><a href="index.html">Back to Home</a></li>
+                            </ul>
+                        </nav>
+
+				</section>
+
+			<!-- Main -->
+				<section id="main">
+					<div class="container">
+
+						<!-- Content -->
+							<article class="box post">
+                                <a href="#" class="image featured"><img src="images/morph1.jpg" alt="" /></a>
+								<header>
+									<h2>Morpheus Walkthrough</h2>
+									<p>by ssi51</p>
+								</header>
+								<p>
+                                    This is for MCC2023 Registration Challenge. I will just go straight to the tasks.
+								</p>
+								<section>
+									<header>
+										<h3>User Flag</h3>
+									</header>
+                                    <p>
+                                        There are 2 ways to get foothold. The flag is in user home directory. Flag format: <span class="code">MCC2023{xxxxx}</span><br>
+                                        As usual, let's start with an Nmap scan.<span class="code"> sudo nmap -sS -sV [Machine IP]</span><br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/1.png" alt="" /></a>
+                                        From the result, we could see that there is a server running. Let's check it out!<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/2.png" alt="" /></a>
+                                        There's nothing much we can do with a default page. But I want to check whether they have 'hidden directories' or no. You can do this by using Gobuster.<br><span class="code">   gobuster dir -u http://[MACHINE IP] -w [wordlist location]</span><br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/3.png" alt="" /></a>
+                                        As you can see, we have 2 hidden directories. Let's check them out~<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/4.png" alt="" /></a>
+                                        This is for the /management directory. It is a login page for OpenEMR<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/5.png" alt="" /></a>
+                                        Meanwhile this is for the /backup directory. As you can see here, they provide us with the usernames and passwords wordlist. From here, I get the idea to do some bruteforce attacks onto the login page. We can do so by using Burpsuite Cluster Bomb Attack<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/6.png" alt="" /></a>
+                                        *I'm using Intruder attack in the POC above because it took too long to do Cluster Bomb Attack. This works the same for Intruder attack, the only difference is that the Cluster Bomb allows you to put 2 wordlists while Intruder only 1.<br>
+                                        From the POC above, I got the correct username and password for the Login page. The username is morpheus while the password is gooniegoogoo.<br>
+                                        <br>
+                                        As soon as I reached the dashboard, I will look around to see if I could upload 
+                                        I will look for a place for me to upload some files. The document template management lets me to do this. Before I start with the actual reverse shell, let's test it out first with mountains.jpg file.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/7.png" alt="" /></a>
+                                        After we upload them, we gotta look for the directory path to our jpg file. To do this, I use Gobuster again.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/8.png" alt="" /></a>
+                                        After going through one by one, I found the directory path is in /sites.<br>
+                                        *This took me a while to do the same thing all over again to find the complete directory path. Finally, I could find it in /management/sites/default/documents/doctemplates<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/9.png" alt="" /></a>
+                                        Now, let's use the actual reverse shell file. I use the PHP cmd 2 from www.revshells.com<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/10.png" alt="" /></a>
+                                        Copy the code and paste it into a new .php file. Then, you may upload the file at the same place we tested.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/11.png" alt="" /></a>
+                                        Do the same as earlier. Find the uploaded file in the directory path.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/12.png" alt="" /></a>
+                                        Click on the file and add <span class="code">?cmd=pwd</span> on the search engine<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/13.png" alt="" /></a>
+                                        What I'm trying to do here is using the search bar as command prompt where it could accept instructions from us. Thanks to our PHP cmd 2 file earlier, we could execute the 'pwd' command to see where we are in the current directory. In this case, we're in the /var/www/html/management/sites/default/documents/doctemplates.<br>
+                                        <br>
+                                        Now, we can look for the user.txt file.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/14.png" alt="" /></a>
+                                    </p>
+                                </section>
+                                <section>
+                                    <header>
+                                        <h3>Root Flag</h3>
+                                    </header>
+									<p>
+                                        There are 2 ways of privilege escalation to get root. (Depending on which track you are doing, red or blue, each track has 1 privilege escalation method). The flag is in root directory. Flag format: MCC2023{xxxxx}<br>
+                                        Since we got the command prompt ready, I want to make a connection so that it's easier for me to execute any commands. Let's go back to www.revshells.com and choose Python3 #2 script.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/15.png" alt="" /></a>
+                                        Start a netcat listener on your kali machine.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/16.png" alt="" /></a>
+                                        Copy the script and paste it on the search bar.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/17.png" alt="" /></a>
+                                        Now, check your netcat listener for the connection. <br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/18.png" alt="" /></a>
+                                        Alright, we're in! Now let's do the <span class="code">sudo -l</span> command to check what commands allowed for me to use in this host.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/19.png" alt="" /></a>
+                                        Looks like the /usr/bin/perl has no password. Let's head to gtfobins.github.io and search for "perl"<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/20.png" alt="" /></a>
+                                        Scroll down and look for 'Sudo'. Copy the command and paste it on the terminal.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/21.png" alt="" /></a>
+                                        Use the command <span class="code">whoami</span> to check who are you logged in as. Aaaand we're root now! Let's go ahead and find for the root.txt file.<br>
+                                        I use the command <span class="code">find / -name root.txt</span> which means find in directory a file named "root.txt". Once we found it, let's cat to read the content.<br>
+                                        <br>
+                                        <a class="image centered"><img src="images/morph/22.png" alt="" /></a>
+                                        Aaaand we're done!<br>
+                                        P/s: Alhamdulilah, I passed the interview. MCC 2023 here I come!
+                                    </p>
+                                </section>
+								<section>
+									<header>
+										<h3>Thank you for reading! <3</h3>
+									</header>
+								</section>
+							</article>
+
+					</div>
+				</section>
+
+			<!-- Footer -->
+            <section id="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-4 col-12-medium">
+                            <section>
+                                <header>
+                                    <h2>About Me</h2>
+                                </header>
+                                <a href="#" class="image featured"><img src="images/pic10.jpg" alt="" /></a>
+                                <p>
+                                    I am <strong>Sarah</strong>, a full-time Network Security student and a part-time sleep aficionado.
+                                    Stay tuned to my blog for the latest insights. Let's embark on this cyber journey with me!
+                                </p>
+                                <footer>
+                                </footer>
+                            </section>
+                        </div>
+                        <div class="col-4 col-6-medium col-12-small">
+                            <section>
+                                <header>
+                                    <h2></h2>
+                                </header>
+                                <ul class="divided">
+                                    <li></li>
+                                </ul>
+                            </section>
+                        </div>
+                        <div class="col-4 col-6-medium col-12-small">
+                            <section>
+                                <header>
+                                    <h2>Stay in Touch</h2>
+                                </header>
+                                <ul class="social">
+                                    <li><a class="icon brands fa-linkedin" href="https://www.linkedin.com/in/sarahmjufri/"><span class="label">LinkedIn</span></a></li>
+                                    <li><a class="icon brands fa-github" href="https://github.com/ssi51"><span class="label">Github</span></a></li>
+                                </ul>
+                                <ul class="contact">
+                                    <li>
+                                        <h3>Based</h3>
+                                        <p>
+                                            Kuala Lumpur, Malaysia
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <h3>Email</h3>
+                                        <p>ssarahimanina@gmail.com</p>
+                                    </li>
+                                </ul>
+                            </section>
+                        </div>
+                        <div class="col-12">
+
+                            <!-- Copyright -->
+                                <div id="copyright">
+                                    <ul class="links">
+                                        <li>&copy; DopeTrope. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                                    </ul>
+                                </div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+		</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
